@@ -22,14 +22,17 @@ import sys
 import os
 import thread
 import time
-import random
 
 from globalVars import *
 import gstt
 import playertest
 import harp
+import points
 import score
 import logo
+import pylibmc
+
+mc = pylibmc.Client(["127.0.0.1"], binary=True, behaviors={"tcp_nodelay": True, "ketama": True})
 
 import frame
 from vectors import Vector2D
@@ -142,7 +145,7 @@ while gstt.fs != GAME_FS_QUIT:
 	keystates_prev = keystates[:]
 	keystates = pygame.key.get_pressed()[:]
 
-	# Code commun de test selon états du jeu
+# Code commun de test selon etats du jeu
 
 
 
@@ -215,7 +218,7 @@ while gstt.fs != GAME_FS_QUIT:
 
 	# OPERATIONS D'AFFICHAGE
 
-	# On efface l'écran avant
+	# On efface l'ecran avant
 	screen.fill(0)
 
 	# Création de la nouvelle frame vide où les objets du jeu vont dessiner
@@ -298,6 +301,8 @@ while gstt.fs != GAME_FS_QUIT:
 			if gstt.closed == 1:
 				gstt.space = 1
 				logo.Draw(fwork)
+				points.Draw(fwork)
+				mc["some_key"] = str(random.randint(0,100))
 			else:
 				gstt.hrp.Draw(fwork)
 			
@@ -319,8 +324,5 @@ while gstt.fs != GAME_FS_QUIT:
 	clock.tick(100)
 
 pygame.quit()
-
-
-
 
 
